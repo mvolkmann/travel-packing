@@ -12,7 +12,7 @@
     border: none;
   }
 
-  input[type=checkbox] {
+  input[type='checkbox'] {
   }
 
   label {
@@ -25,5 +25,5 @@
     <input type="checkbox" bind:checked={item.packed} />
     {item.name}
   </label>
-  <button on:click={() => dispatch('delete')}>&#x1F5D1;</button>
+  <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
 </li>

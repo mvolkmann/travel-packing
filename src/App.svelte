@@ -1,32 +1,41 @@
 <script>
   import Category from './Category.svelte';
-	export let categoryName;
+  import {getGuid} from './util';
+  export let categoryName;
+ 
 
-  let categories = [
-    {
-      name: 'Clothes',
-      items: [
-        {name: 'socks', packed: true},
-        {name: 'shoes', packed: false}
-      ]
-    },
-    {
-      name: 'Backpack',
-      items: [
-        {name: 'pens', packed: true},
-        {name: 'wallet', packed: false}
-      ]
-    }
-  ];
+  let clothes = createCategory('Clothes');
+  clothes.items.push(createItem('socks', true));
+  clothes.items.push(createItem('shoes'));
+
+  let backpack = createCategory('Backpack');
+  backpack.items.push(createItem('pens', true));
+  backpack.items.push(createItem('wallet'));
+
+  let categories = [clothes, backpack];
+
+  function createCategory(name) {
+    return {id: getGuid(), name, items: []};
+  }
+
+  function createItem(name, packed = false) {
+    return {id: getGuid(), name, packed}
+  }
 
   function addCategory() {
-    categories.push({name: categoryName, items: []});
+    categories.push({id: getGuid(), name: categoryName, items: []});
     categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
     categories = categories;
+  }
+
+  function deleteCategory(category) {
+    //TODO: Warn if contains items.
+    categories = categories.filter(cat => cat.id !== category.id);
   }
 </script>
 
 <style>
+  /*
   button:disabled {
     color: lightgray;
   }
@@ -34,20 +43,23 @@
   label {
     display: inline-block;
   }
+  */
 </style>
 
 <main>
-	<h1>Travel Packing Checklist</h1>
+  <h1>Travel Packing Checklist</h1>
 
   <div>
     <label>
       New Category
       <input bind:value={categoryName} />
     </label>
-    <button disabled={!categoryName} on:click={addCategory}>Add Category</button>
+    <button disabled={!categoryName} on:click={addCategory}>
+      Add Category
+    </button>
   </div>
 
   {#each categories as category}
-    <Category category={category} />
+    <Category {category} on:delete={() => deleteCategory(category)} />
   {/each}
 </main>
