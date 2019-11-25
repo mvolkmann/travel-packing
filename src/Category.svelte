@@ -4,7 +4,7 @@
   import {getGuid} from './util';
 
   export let category;
-  export let showPacked;
+  export let show;
 
   const dispatch = createEventDispatcher();
 
@@ -25,6 +25,18 @@
   function deleteItem(item) {
     //TODO: Warn if it contains items.
     category.items = category.items.filter(it => it.id !== item.id);
+  }
+
+  function handleKey(event) {
+    if (event.code === 'Enter') event.target.blur();
+  }
+
+  function shouldShow(show, item) {
+    return (
+      show === 'all' ||
+      (show === 'packed' && item.packed) ||
+      (show === 'unpacked' && !item.packed)
+    );
   }
 </script>
 
@@ -65,9 +77,12 @@
 <section>
   <h3>
     {#if editing}
-      <input bind:value={category.name} on:blur={() => editing = false}/>
+      <input
+        bind:value={category.name}
+        on:blur={() => (editing = false)}
+        on:keypress={handleKey} />
     {:else}
-      <span on:click={() => editing = true}>{category.name}</span>
+      <span on:click={() => (editing = true)}>{category.name}</span>
     {/if}
     <span class="status">{status}</span>
     <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
@@ -83,7 +98,7 @@
 
   <ul>
     {#each category.items as item}
-      {#if !item.packed || showPacked}
+      {#if shouldShow(show, item)}
         <!-- This bind causes the category object to update
            when the item packed value is toggled. -->
         <Item bind:item on:delete={() => deleteItem(item)} />

@@ -6,6 +6,10 @@
   let editing = false;
 
   const dispatch = createEventDispatcher();
+
+  function handleKey(event) {
+    if (event.code === 'Enter') event.target.blur();
+  }
 </script>
 
 <style>
@@ -32,9 +36,12 @@
   <label class="packed-{item.packed}">
     <input type="checkbox" bind:checked={item.packed} />
     {#if editing}
-      <input bind:value={item.name} on:blur={() => editing = false}/>
+      <input
+        bind:value={item.name}
+        on:blur={() => (editing = false)}
+        on:keypress={handleKey} />
     {:else}
-      <span on:click={() => editing = true}>{item.name}</span>
+      <span on:click={() => (editing = true)}>{item.name}</span>
     {/if}
   </label>
   <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>

@@ -4,7 +4,7 @@
 
   let categories = [];
   let categoryName;
-  let showPacked = true;
+  let show = 'all';
 
   createDummyData();
 
@@ -42,7 +42,9 @@
 </script>
 
 <style>
-
+  input[type=radio] {
+    margin-left: 10px;
+  }
 </style>
 
 <main>
@@ -61,17 +63,22 @@
   </p>
 
   <div>
+    <label>Show</label>
     <label>
-      <input type="checkbox" bind:checked={showPacked} />
-      Show Packed Items
-      <label />
+      <input name="show" type="radio" value="all" bind:group={show} />
+      All
+    </label>
+    <label>
+      <input name="show" type="radio" value="packed" bind:group={show} />
+      Packed
+    </label>
+    <label>
+      <input name="show" type="radio" value="unpacked" bind:group={show} />
+      Unpacked
     </label>
   </div>
 
   {#each categories as category}
-    <Category
-      {category}
-      {showPacked}
-      on:delete={() => deleteCategory(category)} />
+    <Category {category} {show} on:delete={() => deleteCategory(category)} />
   {/each}
 </main>
