@@ -8,6 +8,7 @@
 
   const dispatch = createEventDispatcher();
 
+  let editing = false;
   let itemName = '';
 
   $: remaining = category.items.filter(item => !item.packed).length;
@@ -29,6 +30,10 @@
 
 <style>
   h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     margin: 0;
   }
 
@@ -47,6 +52,7 @@
   .status {
     font-size: 18px;
     font-weight: normal;
+    margin: 0 15px;
   }
 
   ul {
@@ -58,9 +64,13 @@
 
 <section>
   <h3>
-    {category.name}
-    <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
+    {#if editing}
+      <input bind:value={category.name} on:blur={() => editing = false}/>
+    {:else}
+      <span on:click={() => editing = true}>{category.name}</span>
+    {/if}
     <span class="status">{status}</span>
+    <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
   </h3>
 
   <form on:submit|preventDefault={addItem}>

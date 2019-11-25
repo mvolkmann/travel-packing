@@ -3,6 +3,8 @@
 
   export let item;
 
+  let editing = false;
+
   const dispatch = createEventDispatcher();
 </script>
 
@@ -29,7 +31,11 @@
 <li>
   <label class="packed-{item.packed}">
     <input type="checkbox" bind:checked={item.packed} />
-    {item.name}
+    {#if editing}
+      <input bind:value={item.name} on:blur={() => editing = false}/>
+    {:else}
+      <span on:click={() => editing = true}>{item.name}</span>
+    {/if}
   </label>
   <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
 </li>

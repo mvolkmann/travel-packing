@@ -2,6 +2,11 @@ body {
   font-family: sans-serif;
 }
 
+button:not(:disabled),
+input:not(:disabled) {
+  cursor: pointer;
+}
+
 button:disabled {
   color: lightgray;
 }
@@ -24,11 +29,13 @@ input,
 button,
 select,
 textarea {
+  --padding: 4px;
+
   font-family: inherit;
   font-size: inherit;
-  padding: 0.4em;
+  padding: var(--padding);
   margin: 0 0 0.5em 0;
   box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 2px;
+  border: solid lightgray 1px;
+  border-radius: var(--padding);
 }
