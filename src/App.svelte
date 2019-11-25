@@ -41,15 +41,6 @@
 </script>
 
 <style>
-  /*
-  button:disabled {
-    color: lightgray;
-  }
-
-  label {
-    display: inline-block;
-  }
-  */
 </style>
 
 <main>

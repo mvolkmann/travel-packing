@@ -13,6 +13,7 @@
   }
 
   input[type='checkbox'] {
+    margin-right: 8px;
   }
 
   label {

@@ -9,6 +9,7 @@ button:disabled {
 button.icon {
   background-color: transparent;
   border: none;
+  margin-bottom: 0;
 }
 
 input:disabled {

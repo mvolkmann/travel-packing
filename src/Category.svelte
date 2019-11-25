@@ -9,7 +9,8 @@
 
   let itemName = '';
 
-  //TODO: Need a way to delete categories and warn if it contains items.
+  $: remaining = category.items.filter(item => !item.packed).length;
+  $: status = `${remaining} of ${category.items.length} remaining`;
 
   function addItem() {
     const {items} = category;
@@ -20,11 +21,16 @@
   }
 
   function deleteItem(item) {
+    //TODO: Warn if it contains items.
     category.items = category.items.filter(it => it.id !== item.id);
   }
 </script>
 
 <style>
+  h3 {
+    margin: 0;
+  }
+
   section {
     --padding: 10px;
 
@@ -32,12 +38,19 @@
     border-radius: var(--padding);
     display: inline-block;
     margin: var(--padding);
-    padding: var(--padding);
+    padding: calc(var(--padding) * 2);
+    padding-top: var(--padding);
+    vertical-align: top;
+  }
+
+  .status {
+    font-size: 18px;
+    font-weight: normal;
   }
 
   ul {
     list-style: none;
-    margin-left: 0;
+    margin: 0;
     padding-left: 0;
   }
 </style>
@@ -46,6 +59,7 @@
   <h3>
     {category.name}
     <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
+    <span class="status">{status}</span>
   </h3>
 
   <form on:submit|preventDefault={addItem}>
@@ -58,7 +72,9 @@
 
   <ul>
     {#each category.items as item}
-      <Item {item} on:delete={() => deleteItem(item)} />
+      <!-- This bind causes the category object to update
+           when the item packed value is toggled. -->
+      <Item bind:item={item} on:delete={() => deleteItem(item)} />
     {:else}
       <div>This category does not contain any items yet.</div>
     {/each}
