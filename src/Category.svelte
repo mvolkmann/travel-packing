@@ -1,6 +1,7 @@
 <script>
   import {createEventDispatcher} from 'svelte';
   import Item from './Item.svelte';
+  import ProgressBar from './ProgressBar.svelte';
   import {getGuid} from './util';
 
   export let category;
@@ -12,7 +13,8 @@
   let itemName = '';
 
   $: remaining = category.items.filter(item => !item.packed).length;
-  $: status = `${remaining} of ${category.items.length} remaining`;
+  $: total = category.items.length
+  $: status = `${remaining} of ${total} remaining`;
 
   function addItem() {
     const {items} = category;
@@ -76,6 +78,7 @@
 </style>
 
 <section>
+  <ProgressBar percent={100 * (total - remaining) / total} />
   <h3>
     {#if editing}
       <input
