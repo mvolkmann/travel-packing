@@ -25,6 +25,16 @@
 </script>
 
 <style>
+  section {
+    --padding: 10px;
+
+    border: solid red 1px;
+    border-radius: var(--padding);
+    display: inline-block;
+    margin: var(--padding);
+    padding: var(--padding);
+  }
+
   ul {
     list-style: none;
     margin-left: 0;
@@ -32,23 +42,25 @@
   }
 </style>
 
-<h3>
-  {category.name}
-  <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
-</h3>
+<section>
+  <h3>
+    {category.name}
+    <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
+  </h3>
 
-<form on:submit|preventDefault={addItem}>
-  <label>
-    New Item
-    <input bind:value={itemName} />
-  </label>
-  <button disabled={!itemName}>Add Item</button>
-</form>
+  <form on:submit|preventDefault={addItem}>
+    <label>
+      New Item
+      <input bind:value={itemName} />
+    </label>
+    <button disabled={!itemName}>Add Item</button>
+  </form>
 
-<ul>
-  {#each category.items as item}
-    <Item {item} on:delete={() => deleteItem(item)} />
-  {:else}
-    <div>This category does not contain any items yet.</div>
-  {/each}
-</ul>
+  <ul>
+    {#each category.items as item}
+      <Item {item} on:delete={() => deleteItem(item)} />
+    {:else}
+      <div>This category does not contain any items yet.</div>
+    {/each}
+  </ul>
+</section>

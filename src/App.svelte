@@ -1,25 +1,30 @@
 <script>
   import Category from './Category.svelte';
   import {getGuid} from './util';
-  export let categoryName;
- 
 
-  let clothes = createCategory('Clothes');
-  clothes.items.push(createItem('socks', true));
-  clothes.items.push(createItem('shoes'));
+  let categories = [];
+  let categoryName;
 
-  let backpack = createCategory('Backpack');
-  backpack.items.push(createItem('pens', true));
-  backpack.items.push(createItem('wallet'));
-
-  let categories = [clothes, backpack];
+  createDummyData();
 
   function createCategory(name) {
     return {id: getGuid(), name, items: []};
   }
 
+  function createDummyData() {
+    let clothes = createCategory('Clothes');
+    clothes.items.push(createItem('socks', true));
+    clothes.items.push(createItem('shoes'));
+
+    let backpack = createCategory('Backpack');
+    backpack.items.push(createItem('pens', true));
+    backpack.items.push(createItem('wallet'));
+
+    categories = [clothes, backpack];
+  }
+
   function createItem(name, packed = false) {
-    return {id: getGuid(), name, packed}
+    return {id: getGuid(), name, packed};
   }
 
   function addCategory() {
@@ -55,9 +60,7 @@
       New Category
       <input bind:value={categoryName} />
     </label>
-    <button disabled={!categoryName}>
-      Add Category
-    </button>
+    <button disabled={!categoryName}>Add Category</button>
   </form>
 
   {#each categories as category}
