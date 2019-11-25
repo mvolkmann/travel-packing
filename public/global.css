@@ -4,7 +4,6 @@ body {
   font-family: sans-serif;
   height: 100vh;
   margin: 0;
-  padding: 20px;
 }
 
 button:not(:disabled),
@@ -36,11 +35,12 @@ select,
 textarea {
   --padding: 4px;
 
+  border-radius: var(--padding);
+  border: none;
+  box-sizing: border-box;
+  color: gray;
   font-family: inherit;
   font-size: inherit;
+  margin: 0;
   padding: var(--padding);
-  margin: 0 0 0.5em 0;
-  box-sizing: border-box;
-  border: solid lightgray 1px;
-  border-radius: var(--padding);
 }

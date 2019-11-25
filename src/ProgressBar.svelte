@@ -5,13 +5,13 @@
 <style>
   .bar {
     background-color: white;
-    border: solid black 1px;
+    border: solid lightgray 1px;
     height: 10px;
     width: 100%;
   }
 
   .progress {
-    background-color: pink;
+    background-color: orange;
     height: 100%;
   }
 </style>

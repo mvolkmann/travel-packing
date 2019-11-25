@@ -1,103 +1,39 @@
 <script>
-  import Category from './Category.svelte';
-  import {getGuid} from './util';
+  import Checklist from './Checklist.svelte';
+  import Login from './Login.svelte';
 
-  let categories = [];
-  let categoryName;
-  let show = 'all';
-
-  createDummyData();
-
-  function createCategory(name) {
-    return {id: getGuid(), name, items: []};
-  }
-
-  function createDummyData() {
-    let backpack = createCategory('Backpack');
-    backpack.items.push(createItem('pens', true));
-    backpack.items.push(createItem('wallet'));
-
-    let clothes = createCategory('Clothes');
-    clothes.items.push(createItem('socks', true));
-    clothes.items.push(createItem('shoes'));
-
-    categories = [backpack, clothes];
-  }
-
-  function createItem(name, packed = false) {
-    return {id: getGuid(), name, packed};
-  }
-
-  function addCategory() {
-    categories.push({id: getGuid(), name: categoryName, items: []});
-    categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
-    categories = categories;
-    categoryName = '';
-  }
-
-  function clearAllChecks() {
-    for (const category of categories) {
-      for (const item of category.items) {
-        item.packed = false;
-      }
-    }
-    categories = categories;
-  }
-
-  function deleteCategory(category) {
-    //TODO: Warn if contains items.
-    categories = categories.filter(cat => cat.id !== category.id);
-  }
+  let page = Login;
+  //let page = Checklist;
 </script>
 
 <style>
-  .clear {
-    margin-left: 30px;
+  .hero {
+    --height: 120px;
+
+    background-color: orange;
+    color: white;
+    font-size: 64px;
+    height: var(--height);
+    line-height: var(--height);
+    margin: 0 0 50px 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 100vw;
   }
 
-  h1 {
-    margin-top: 0;
-  }
-
-  input[type=radio] {
-    margin-left: 10px;
+  main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
   }
 </style>
 
 <main>
-  <h1>Travel Packing Checklist</h1>
-
-  <form on:submit|preventDefault={addCategory}>
-    <label>
-      New Category
-      <input bind:value={categoryName} />
-    </label>
-    <button disabled={!categoryName}>Add Category</button>
-  </form>
-  <p>
-    Suggested categories include Backpack, Clothes, Last Minute, Medicines,
-    Running Gear, and Toiletries.
-  </p>
-
-  <div>
-    <label>Show</label>
-    <label>
-      <input name="show" type="radio" value="all" bind:group={show} />
-      All
-    </label>
-    <label>
-      <input name="show" type="radio" value="packed" bind:group={show} />
-      Packed
-    </label>
-    <label>
-      <input name="show" type="radio" value="unpacked" bind:group={show} />
-      Unpacked
-    </label>
-
-    <button class="clear" on:click={clearAllChecks}>Clear All Checks</button>
-  </div>
-
-  {#each categories as category}
-    <Category {category} {show} on:delete={() => deleteCategory(category)} />
-  {/each}
+  <h1 class="hero">Travel Packing Checklist</h1>
+  <svelte:component
+    this={page}
+    on:login={() => (page = Checklist)}
+    on:logout={() => (page = Login)} />
 </main>

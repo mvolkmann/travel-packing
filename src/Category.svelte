@@ -13,7 +13,7 @@
   let itemName = '';
 
   $: remaining = category.items.filter(item => !item.packed).length;
-  $: total = category.items.length
+  $: total = category.items.length;
   $: status = `${remaining} of ${total} remaining`;
 
   function addItem() {
@@ -43,6 +43,10 @@
 </script>
 
 <style>
+  button, input {
+    border: solid lightgray 1px;
+  }
+
   h3 {
     display: flex;
     justify-content: space-between;
@@ -78,7 +82,7 @@
 </style>
 
 <section>
-  <ProgressBar percent={100 * (total - remaining) / total} />
+  <ProgressBar percent={(100 * (total - remaining)) / total} />
   <h3>
     {#if editing}
       <input
