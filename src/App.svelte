@@ -35,6 +35,15 @@
     categoryName = '';
   }
 
+  function clearAllChecks() {
+    for (const category of categories) {
+      for (const item of category.items) {
+        item.packed = false;
+      }
+    }
+    categories = categories;
+  }
+
   function deleteCategory(category) {
     //TODO: Warn if contains items.
     categories = categories.filter(cat => cat.id !== category.id);
@@ -42,6 +51,10 @@
 </script>
 
 <style>
+  .clear {
+    margin-left: 30px;
+  }
+
   input[type=radio] {
     margin-left: 10px;
   }
@@ -76,6 +89,8 @@
       <input name="show" type="radio" value="unpacked" bind:group={show} />
       Unpacked
     </label>
+
+    <button class="clear" on:click={clearAllChecks}>Clear All Checks</button>
   </div>
 
   {#each categories as category}
