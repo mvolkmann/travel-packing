@@ -55,6 +55,10 @@
     margin-left: 30px;
   }
 
+  h1 {
+    margin-top: 0;
+  }
+
   input[type=radio] {
     margin-left: 10px;
   }

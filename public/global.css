@@ -1,5 +1,10 @@
 body {
+  background-color: cornflowerblue;
+  color: white;
   font-family: sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 20px;
 }
 
 button:not(:disabled),

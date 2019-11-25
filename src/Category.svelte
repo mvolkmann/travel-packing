@@ -52,8 +52,9 @@
   section {
     --padding: 10px;
 
-    border: dashed gray 1px;
+    background-color: white;
     border-radius: var(--padding);
+    color: black;
     display: inline-block;
     margin: var(--padding);
     padding: calc(var(--padding) * 2);
