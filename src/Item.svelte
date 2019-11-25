@@ -18,10 +18,15 @@
   label {
     display: inline-block;
   }
+
+  .packed-true {
+    color: gray;
+    text-decoration: line-through;
+  }
 </style>
 
 <li>
-  <label>
+  <label class="packed-{item.packed}">
     <input type="checkbox" bind:checked={item.packed} />
     {item.name}
   </label>

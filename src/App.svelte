@@ -26,6 +26,7 @@
     categories.push({id: getGuid(), name: categoryName, items: []});
     categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
     categories = categories;
+    categoryName = '';
   }
 
   function deleteCategory(category) {
@@ -49,15 +50,15 @@
 <main>
   <h1>Travel Packing Checklist</h1>
 
-  <div>
+  <form on:submit|preventDefault={addCategory}>
     <label>
       New Category
       <input bind:value={categoryName} />
     </label>
-    <button disabled={!categoryName} on:click={addCategory}>
+    <button disabled={!categoryName}>
       Add Category
     </button>
-  </div>
+  </form>
 
   {#each categories as category}
     <Category {category} on:delete={() => deleteCategory(category)} />

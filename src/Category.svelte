@@ -16,6 +16,7 @@
     items.push({id: getGuid(), name: itemName, packed: false});
     items.sort((item1, item2) => item1.name.localeCompare(item2.name));
     category.items = items;
+    itemName = '';
   }
 
   function deleteItem(item) {
@@ -36,13 +37,13 @@
   <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
 </h3>
 
-<div>
+<form on:submit|preventDefault={addItem}>
   <label>
     New Item
     <input bind:value={itemName} />
   </label>
-  <button disabled={!itemName} on:click={addItem}>Add Item</button>
-</div>
+  <button disabled={!itemName}>Add Item</button>
+</form>
 
 <ul>
   {#each category.items as item}
