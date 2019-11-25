@@ -4,6 +4,7 @@
   import {getGuid} from './util';
 
   export let category;
+  export let showPacked;
 
   const dispatch = createEventDispatcher();
 
@@ -34,7 +35,7 @@
   section {
     --padding: 10px;
 
-    border: solid red 1px;
+    border: dashed gray 1px;
     border-radius: var(--padding);
     display: inline-block;
     margin: var(--padding);
@@ -72,9 +73,11 @@
 
   <ul>
     {#each category.items as item}
-      <!-- This bind causes the category object to update
+      {#if !item.packed || showPacked}
+        <!-- This bind causes the category object to update
            when the item packed value is toggled. -->
-      <Item bind:item={item} on:delete={() => deleteItem(item)} />
+        <Item bind:item on:delete={() => deleteItem(item)} />
+      {/if}
     {:else}
       <div>This category does not contain any items yet.</div>
     {/each}

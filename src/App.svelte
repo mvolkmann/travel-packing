@@ -4,6 +4,7 @@
 
   let categories = [];
   let categoryName;
+  let showPacked = true;
 
   createDummyData();
 
@@ -12,15 +13,15 @@
   }
 
   function createDummyData() {
-    let clothes = createCategory('Clothes');
-    clothes.items.push(createItem('socks', true));
-    clothes.items.push(createItem('shoes'));
-
     let backpack = createCategory('Backpack');
     backpack.items.push(createItem('pens', true));
     backpack.items.push(createItem('wallet'));
 
-    categories = [clothes, backpack];
+    let clothes = createCategory('Clothes');
+    clothes.items.push(createItem('socks', true));
+    clothes.items.push(createItem('shoes'));
+
+    categories = [backpack, clothes];
   }
 
   function createItem(name, packed = false) {
@@ -41,6 +42,7 @@
 </script>
 
 <style>
+
 </style>
 
 <main>
@@ -53,8 +55,23 @@
     </label>
     <button disabled={!categoryName}>Add Category</button>
   </form>
+  <p>
+    Suggested categories include Backpack, Clothes, Last Minute, Medicines,
+    Running Gear, and Toiletries.
+  </p>
+
+  <div>
+    <label>
+      <input type="checkbox" bind:checked={showPacked} />
+      Show Packed Items
+      <label />
+    </label>
+  </div>
 
   {#each categories as category}
-    <Category {category} on:delete={() => deleteCategory(category)} />
+    <Category
+      {category}
+      {showPacked}
+      on:delete={() => deleteCategory(category)} />
   {/each}
 </main>
