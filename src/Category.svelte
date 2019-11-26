@@ -1,6 +1,7 @@
 <script>
   import {createEventDispatcher} from 'svelte';
   import {flip} from 'svelte/animate';
+	import {linear} from 'svelte/easing';
   import Item from './Item.svelte';
   import ProgressBar from './ProgressBar.svelte';
   import {getGuid} from './util';
@@ -9,6 +10,8 @@
   export let show;
 
   const dispatch = createEventDispatcher();
+
+  const options = {duration: 700, easing: linear, times: 2};
 
   let editing = false;
   let itemName = '';
@@ -42,6 +45,18 @@
       (show === 'unpacked' && !item.packed)
     );
   }
+
+	function spin(node, options) {
+    const {easing, times = 1} = options;
+		return {
+			...options,
+			css(t) {
+				const eased = easing(t);
+				const degrees = 360 * times; // through which to spin
+				return `transform-origin: 50% 50%; transform: scale(${eased}) rotate(${eased * degrees}deg);`;
+			}
+		};
+	}
 </script>
 
 <style>
@@ -84,7 +99,7 @@
   }
 </style>
 
-<section>
+<section out:spin={options}>
   <ProgressBar percent={(100 * (total - remaining)) / total} />
   <h3>
     {#if editing}

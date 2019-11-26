@@ -1,9 +1,12 @@
 <script>
   import {createEventDispatcher, onMount} from 'svelte';
+  import {flip} from 'svelte/animate';
   const dispatch = createEventDispatcher();
 
   import Category from './Category.svelte';
   import {getGuid} from './util';
+
+  const options = {duration: 700};
 
   let categories;
   let categoryName;
@@ -63,7 +66,7 @@
 
   function restore() {
     const text = localStorage.getItem('travel-packing');
-    if (text) {
+    if (text && text !== '[]') {
       categories = text ? JSON.parse(text) : [];
     } else {
       createDummyData();
@@ -72,6 +75,10 @@
 </script>
 
 <style>
+  .animate {
+    display: inline-block;
+  }
+
   .clear {
     margin-left: 30px;
   }
@@ -144,13 +151,16 @@
   </div>
 
   {#if categories}
-    {#each categories as category}
-      <!-- The bind here is necessary so changes to category in
-           the Category component trigger a call to persist here. -->
-      <Category
-        bind:category
-        {show}
-        on:delete={() => deleteCategory(category)} />
+    <!-- The bind here is necessary so changes to category in
+         the Category component trigger a call to persist here. -->
+    {#each categories as category (category.id)}
+      <div class="animate" animate:flip={options}>
+        <Category
+          bind:category
+          {show}
+          on:delete={() => deleteCategory(category)}
+        />
+      </div>
     {/each}
   {/if}
 </main>
