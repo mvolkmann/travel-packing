@@ -1,5 +1,6 @@
 <script>
   import {createEventDispatcher} from 'svelte';
+ 	//import {flip} from 'svelte/animate';
   import Item from './Item.svelte';
   import ProgressBar from './ProgressBar.svelte';
   import {getGuid} from './util';
@@ -105,7 +106,7 @@
   </form>
 
   <ul>
-    {#each category.items as item}
+    {#each category.items as item (item.id)}
       {#if shouldShow(show, item)}
         <!-- This bind causes the category object to update
            when the item packed value is toggled. -->
@@ -115,4 +116,11 @@
       <div>This category does not contain any items yet.</div>
     {/each}
   </ul>
+  <!--
+    {#each category.items as item (item.id)}
+      {#if shouldShow(show, item)}
+        <Item item={item} /> 
+      {/if}
+    {/each}
+  -->
 </section>
