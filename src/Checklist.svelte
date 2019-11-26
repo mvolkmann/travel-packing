@@ -5,15 +5,13 @@
   import Category from './Category.svelte';
   import {getGuid} from './util';
 
-  let categories = [];
+  let categories;
   let categoryName;
   let show = 'all';
 
-  onMount(() => restore());
+  onMount(restore);
 
   $: persist(categories);
-
-  createDummyData();
 
   function addCategory() {
     categories.push({id: getGuid(), name: categoryName, items: []});
@@ -57,12 +55,18 @@
   }
 
   function persist(categories) {
-    console.log('Checklist.svelte persist: categories =', categories);
-    localStorage.setItem('travel-packing', JSON.stringify(categories));
+    if (categories) {
+      localStorage.setItem('travel-packing', JSON.stringify(categories));
+    }
   }
 
   function restore() {
-    categories = JSON.parse(localStorage.getItem('travel-packing'));
+    const text = localStorage.getItem('travel-packing');
+    if (text) {
+      categories = text ? JSON.parse(text) : [];
+    } else {
+      createDummyData();
+    }
   }
 </script>
 
@@ -138,7 +142,9 @@
     <button class="clear" on:click={clearAllChecks}>Clear All Checks</button>
   </div>
 
-  {#each categories as category}
-    <Category {category} {show} on:delete={() => deleteCategory(category)} />
-  {/each}
+  {#if categories}
+    {#each categories as category}
+      <Category {category} {show} on:delete={() => deleteCategory(category)} />
+    {/each}
+  {/if}
 </main>
