@@ -1,6 +1,6 @@
 <script>
   import {createEventDispatcher} from 'svelte';
- 	//import {flip} from 'svelte/animate';
+ 	import {flip} from 'svelte/animate';
   import Item from './Item.svelte';
   import ProgressBar from './ProgressBar.svelte';
   import {getGuid} from './util';
@@ -106,21 +106,17 @@
   </form>
 
   <ul>
-    {#each category.items as item (item.id)}
-      {#if shouldShow(show, item)}
+    {#each category.items.filter(i => showShow(show, i)) as item (item.id)}
+      <!-- This div is required because animate must appear
+           on a direct child of keyed each block.
+           It cannot be applied to a component. -->
+      <div animate:flip>
         <!-- This bind causes the category object to update
-           when the item packed value is toggled. -->
+             when the item packed value is toggled. -->
         <Item bind:item on:delete={() => deleteItem(item)} />
-      {/if}
+      </div>
     {:else}
       <div>This category does not contain any items yet.</div>
     {/each}
   </ul>
-  <!--
-    {#each category.items as item (item.id)}
-      {#if shouldShow(show, item)}
-        <Item item={item} /> 
-      {/if}
-    {/each}
-  -->
 </section>
