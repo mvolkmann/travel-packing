@@ -11,6 +11,7 @@
 
   onMount(restore);
 
+  // Any time categories changes, persist it to localStorage.
   $: persist(categories);
 
   function addCategory() {
@@ -144,7 +145,12 @@
 
   {#if categories}
     {#each categories as category}
-      <Category {category} {show} on:delete={() => deleteCategory(category)} />
+      <!-- The bind here is necessary so changes to category in
+           the Category component trigger a call to persist here. -->
+      <Category
+        bind:category
+        {show}
+        on:delete={() => deleteCategory(category)} />
     {/each}
   {/if}
 </main>
