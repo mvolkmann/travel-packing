@@ -1,6 +1,6 @@
 <script>
   import {createEventDispatcher} from 'svelte';
-	//import {flip} from 'svelte/animate';
+  //import {flip} from 'svelte/animate';
 
   export let item;
 

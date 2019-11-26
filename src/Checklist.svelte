@@ -1,5 +1,5 @@
 <script>
-  import {createEventDispatcher} from 'svelte';
+  import {createEventDispatcher, onMount} from 'svelte';
   const dispatch = createEventDispatcher();
 
   import Category from './Category.svelte';
@@ -9,7 +9,27 @@
   let categoryName;
   let show = 'all';
 
+  onMount(() => restore());
+
+  $: persist(categories);
+
   createDummyData();
+
+  function addCategory() {
+    categories.push({id: getGuid(), name: categoryName, items: []});
+    categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
+    categories = categories;
+    categoryName = '';
+  }
+
+  function clearAllChecks() {
+    for (const category of categories) {
+      for (const item of category.items) {
+        item.packed = false;
+      }
+    }
+    categories = categories;
+  }
 
   function createCategory(name) {
     return {id: getGuid(), name, items: []};
@@ -31,25 +51,18 @@
     return {id: getGuid(), name, packed};
   }
 
-  function addCategory() {
-    categories.push({id: getGuid(), name: categoryName, items: []});
-    categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
-    categories = categories;
-    categoryName = '';
-  }
-
-  function clearAllChecks() {
-    for (const category of categories) {
-      for (const item of category.items) {
-        item.packed = false;
-      }
-    }
-    categories = categories;
-  }
-
   function deleteCategory(category) {
     //TODO: Warn if contains items.
     categories = categories.filter(cat => cat.id !== category.id);
+  }
+
+  function persist(categories) {
+    console.log('Checklist.svelte persist: categories =', categories);
+    localStorage.setItem('travel-packing', JSON.stringify(categories));
+  }
+
+  function restore() {
+    categories = JSON.parse(localStorage.getItem('travel-packing'));
   }
 </script>
 
@@ -98,7 +111,9 @@
       <input bind:value={categoryName} />
     </label>
     <button disabled={!categoryName}>Add Category</button>
-    <button class="logout-btn" on:click={() => dispatch('logout')}>Log Out</button>
+    <button class="logout-btn" on:click={() => dispatch('logout')}>
+      Log Out
+    </button>
   </form>
   <p>
     Suggested categories include Backpack, Clothes, Last Minute, Medicines,

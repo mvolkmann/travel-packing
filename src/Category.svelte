@@ -1,6 +1,6 @@
 <script>
   import {createEventDispatcher} from 'svelte';
- 	import {flip} from 'svelte/animate';
+  import {flip} from 'svelte/animate';
   import Item from './Item.svelte';
   import ProgressBar from './ProgressBar.svelte';
   import {getGuid} from './util';
@@ -16,6 +16,7 @@
   $: remaining = category.items.filter(item => !item.packed).length;
   $: total = category.items.length;
   $: status = `${remaining} of ${total} remaining`;
+  $: itemsToShow = category.items.filter(i => shouldShow(show, i));
 
   function addItem() {
     const {items} = category;
@@ -44,7 +45,8 @@
 </script>
 
 <style>
-  button, input {
+  button,
+  input {
     border: solid lightgray 1px;
   }
 
@@ -106,10 +108,10 @@
   </form>
 
   <ul>
-    {#each category.items.filter(i => showShow(show, i)) as item (item.id)}
-      <!-- This div is required because animate must appear
-           on a direct child of keyed each block.
-           It cannot be applied to a component. -->
+    <!-- The div inside #each is required because animate
+         must appear on a direct child of keyed each block.
+         It cannot be applied to a component. -->
+    {#each itemsToShow as item (item.id)}
       <div animate:flip>
         <!-- This bind causes the category object to update
              when the item packed value is toggled. -->
