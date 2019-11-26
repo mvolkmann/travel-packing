@@ -1,6 +1,7 @@
 <script>
   import {createEventDispatcher} from 'svelte';
   import {flip} from 'svelte/animate';
+  import {scale} from 'svelte/transition';
 	import {linear} from 'svelte/easing';
   import Item from './Item.svelte';
   import ProgressBar from './ProgressBar.svelte';
@@ -99,7 +100,7 @@
   }
 </style>
 
-<section out:spin={options}>
+<section in:scale={options} out:spin={options}>
   <ProgressBar percent={(100 * (total - remaining)) / total} />
   <h3>
     {#if editing}
