@@ -34,12 +34,8 @@
 
       // Trigger Svelte update.
       categories = categories;
-
-      hover = null;
     }
   };
-
-  let hover = null; // a category id
 
   // Must do this before first call to persist.
   restore();
@@ -174,8 +170,6 @@
     Running Gear, and Toiletries.
   </p>
 
-  <div>hover = {hover}</div>
-
   <div class="radios">
     <label>Show</label>
     <label>
@@ -201,7 +195,6 @@
       <Category
         bind:category
         dnd={dragAndDrop}
-        bind:hover
         {show}
         on:delete={() => deleteCategory(category)}
         on:persist={persist} />

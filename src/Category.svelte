@@ -9,7 +9,6 @@
 
   export let category;
   export let dnd;
-  export let hover;
   export let show;
 
   const dispatch = createEventDispatcher();
@@ -17,6 +16,7 @@
   const options = {duration: 700, easing: linear, times: 2};
 
   let editing = false;
+  let hovering = false;
   let itemName = '';
   let items = [];
 
@@ -108,6 +108,10 @@
     vertical-align: top;
   }
 
+  section * {
+    pointer-events: none;
+  }
+
   .status {
     font-size: 18px;
     font-weight: normal;
@@ -124,10 +128,18 @@
 <section
   in:scale={options}
   out:spin={options}
-  class:hover={hover === category.id}
-  on:dragenter={() => (hover = category.id)}
-  on:dragleave={() => (hover = null)}
-  on:drop|preventDefault={event => dnd.drop(event, category.id)}
+  class:hover={hovering}
+  on:dragenter={() => hovering = true}
+  on:dragleave={event => {
+    // Only turn off hovering if leaving
+    // the root element of this component.
+    const {localName} = event.target;
+    if (localName === 'section') hovering = false;
+  }}
+  on:drop|preventDefault={event => {
+    dnd.drop(event, category.id);
+    hovering = false;
+  }}
   ondragover="return false">
   <ProgressBar percent={(100 * (total - remaining)) / total} />
   <h3>
@@ -142,8 +154,6 @@
     <span class="status">{status}</span>
     <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
   </h3>
-
-  <div>{category.id.substring(0, 8)}</div>
 
   <form on:submit|preventDefault={addItem}>
     <label>

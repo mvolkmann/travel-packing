@@ -31,6 +31,9 @@
 
   li {
     display: inline-block;
+    /* This is needed to counteract the "section *" setting
+       of "pointer-events: none" in Category.svelte. */
+    pointer-events: auto;
   }
 
   .packed-true {
