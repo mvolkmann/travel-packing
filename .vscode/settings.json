@@ -5,8 +5,10 @@
     "dragleave",
     "dragstart",
     "importee",
+    "keydown",
     "lightgray",
     "ondragover",
+    "scriptx",
     "signup",
     "sirv",
     "uuidv"

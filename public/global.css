@@ -34,7 +34,7 @@ input,
 button,
 select,
 textarea {
-  --padding: 4px;
+  --padding: 10px;
 
   border-radius: var(--padding);
   border: none;

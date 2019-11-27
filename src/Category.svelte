@@ -3,10 +3,13 @@
   import {flip} from 'svelte/animate';
   import {scale} from 'svelte/transition';
   import {linear} from 'svelte/easing';
+
+  import Dialog from './Dialog.svelte';
   import Item from './Item.svelte';
   import ProgressBar from './ProgressBar.svelte';
   import {getGuid, sortOnName} from './util';
 
+  export let categories;
   export let category;
   export let dnd;
   export let show;
@@ -19,6 +22,8 @@
   let hovering = false;
   let itemName = '';
   let items = [];
+  let message = '';
+  let myDialog = null;
 
   $: items = Object.values(category.items);
   $: remaining = items.filter(item => !item.packed).length;
@@ -27,6 +32,15 @@
   $: itemsToShow = sortOnName(items.filter(i => shouldShow(show, i)));
 
   function addItem() {
+    const duplicate = Object.values(categories).some(cat =>
+      Object.values(cat.items).some(item => item.name === itemName)
+    );
+    if (duplicate) {
+      message = `The item "${itemName}" already exists.`;
+      myDialog.showModal();
+      return;
+    }
+
     const {items} = category;
     const id = getGuid();
     items[id] = {id, name: itemName, packed: false};
@@ -131,8 +145,6 @@
   class:hover={hovering}
   on:dragenter={() => (hovering = true)}
   on:dragleave={event => {
-    // Only turn off hovering if leaving
-    // the root element of this component.
     const {localName} = event.target;
     if (localName === 'section') hovering = false;
   }}
@@ -154,10 +166,7 @@
     <span class="status">{status}</span>
     <button
       class="icon"
-      on:click={() => {
-        console.log('Category.svelte: got click');
-        dispatch('delete');
-      }}>
+      on:click={() => dispatch('delete')}>
       &#x1F5D1;
     </button>
   </h3>
@@ -188,4 +197,8 @@
       <div>This category does not contain any items yet.</div>
     {/each}
   </ul>
+
+  <Dialog title="Categories" bind:dialog={myDialog}>
+    <div>{message}</div>
+  </Dialog>
 </section>

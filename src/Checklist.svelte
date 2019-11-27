@@ -3,6 +3,7 @@
   import {flip} from 'svelte/animate';
 
   import Category from './Category.svelte';
+  import Dialog from './Dialog.svelte';
   import {getGuid, sortOnName} from './util';
 
   const dispatch = createEventDispatcher();
@@ -11,6 +12,8 @@
   let categoryArray = [];
   let categories = {};
   let categoryName;
+  let message = '';
+  let myDialog = null;
   let show = 'all';
 
   $: categoryArray = sortOnName(Object.values(categories));
@@ -44,6 +47,15 @@
   $: if (categories) persist();
 
   function addCategory() {
+    const duplicate = Object.values(categories).some(
+      cat => cat.name === categoryName
+    );
+    if (duplicate) {
+      message = `The category "${categoryName}" already exists.`;
+      myDialog.showModal();
+      return;
+    }
+
     const id = getGuid();
     categories[id] = {id, name: categoryName, items: {}};
     //categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
@@ -93,7 +105,6 @@
 
   function deleteCategory(category) {
     //TODO: Warn if contains items.
-    console.log('Checklist.svelte deleteCategory: category =', category);
     delete categories[category.id];
     categories = categories;
   }
@@ -128,6 +139,9 @@
   }
 
   input[type='radio'] {
+    --size: 24px;
+    height: var(--size);
+    width: var(--size);
     margin-left: 10px;
   }
 
@@ -150,7 +164,8 @@
   }
 
   .radios > label > input {
-    margin: 0 10px 3px 0;
+    margin-bottom: -3px;
+    margin-right: 5px;
   }
 
   section {
@@ -208,6 +223,7 @@
       <div class="animate" animate:flip={options}>
         <Category
           bind:category
+          {categories}
           dnd={dragAndDrop}
           {show}
           on:delete={() => deleteCategory(category)}
@@ -215,4 +231,8 @@
       </div>
     {/each}
   </div>
+
+  <Dialog title="Categories" bind:dialog={myDialog}>
+    <div>{message}</div>
+  </Dialog>
 </section>
