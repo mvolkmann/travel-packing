@@ -4,7 +4,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "format": "prettier --write '{public,src}/**/*.{css,html,js,svelte}'",
+    "format": "prettier --write 'src/**/*.{css,html,js,svelte}'",
     "lint": "eslint --fix --quiet src --ext .js,.svelte",
     "start": "sirv public"
   },

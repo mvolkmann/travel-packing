@@ -35,5 +35,6 @@
   <svelte:component
     this={page}
     on:login={() => (page = Checklist)}
-    on:logout={() => (page = Login)} />
+    on:logout={() => (page = Login)}
+    on:signup={() => alert('Signup is not implemented yet.')} />
 </main>

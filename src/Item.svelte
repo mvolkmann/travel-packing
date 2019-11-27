@@ -29,6 +29,10 @@
     display: inline-block;
   }
 
+  li {
+    display: inline-block;
+  }
+
   .packed-true {
     color: gray;
     text-decoration: line-through;

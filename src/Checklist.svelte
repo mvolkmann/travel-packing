@@ -1,19 +1,21 @@
 <script>
   import {createEventDispatcher, onMount} from 'svelte';
   import {flip} from 'svelte/animate';
-  const dispatch = createEventDispatcher();
 
   import Category from './Category.svelte';
-  import {getGuid} from './util';
+  import {getGuid, sortOnName} from './util';
 
+  const dispatch = createEventDispatcher();
   const options = {duration: 700};
 
-  let categories;
+  let categoryArray = [];
+  let categories = {};
   let categoryName;
   let show = 'all';
 
-  const dragAndDrop = {
-    hoveringOver: null,
+  $: categoryArray = sortOnName(Object.values(categories));
+
+  let dragAndDrop = {
     drag(event, categoryId, itemId) {
       const data = {categoryId, itemId};
       event.dataTransfer.setData('text/plain', JSON.stringify(data));
@@ -33,14 +35,16 @@
       // Trigger Svelte update.
       categories = categories;
 
-      this.hoveringOver = null;
+      hover = null;
     }
   };
+
+  let hover = null; // a category id
 
   onMount(restore);
 
   // Any time categories changes, persist it to localStorage.
-  $: persist(categories);
+  $: if (categories) persist();
 
   function addCategory() {
     const id = getGuid();
@@ -96,10 +100,8 @@
     categories = categories;
   }
 
-  function persist(categories) {
-    if (categories) {
-      localStorage.setItem('travel-packing', JSON.stringify(categories));
-    }
+  function persist() {
+    localStorage.setItem('travel-packing', JSON.stringify(categories));
   }
 
   function restore() {
@@ -171,6 +173,8 @@
     Running Gear, and Toiletries.
   </p>
 
+  <div>hover = {hover}</div>
+
   <div class="radios">
     <label>Show</label>
     <label>
@@ -189,17 +193,17 @@
     <button class="clear" on:click={clearAllChecks}>Clear All Checks</button>
   </div>
 
-  {#if categories}
-    <!-- The bind here is necessary so changes to category in
-         the Category component trigger a call to persist here. -->
-    {#each Object.values(categories) as category (category.id)}
-      <div class="animate" animate:flip={options}>
-        <Category
-          bind:category
-          dnd={dragAndDrop}
-          {show}
-          on:delete={() => deleteCategory(category)} />
-      </div>
-    {/each}
-  {/if}
+  <!-- The bind here is necessary so changes to category in
+        the Category component trigger a call to persist here. -->
+  {#each categoryArray as category (category.id)}
+    <div class="animate" animate:flip={options}>
+      <Category
+        bind:category
+        dnd={dragAndDrop}
+        bind:hover
+        {show}
+        on:delete={() => deleteCategory(category)}
+        on:persist={persist} />
+    </div>
+  {/each}
 </main>

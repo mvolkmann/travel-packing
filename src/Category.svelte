@@ -5,10 +5,11 @@
   import {linear} from 'svelte/easing';
   import Item from './Item.svelte';
   import ProgressBar from './ProgressBar.svelte';
-  import {getGuid} from './util';
+  import {getGuid, sortOnName} from './util';
 
   export let category;
   export let dnd;
+  export let hover;
   export let show;
 
   const dispatch = createEventDispatcher();
@@ -17,24 +18,32 @@
 
   let editing = false;
   let itemName = '';
+  let items = [];
 
   $: items = Object.values(category.items);
   $: remaining = items.filter(item => !item.packed).length;
   $: total = items.length;
   $: status = `${remaining} of ${total} remaining`;
-  $: itemsToShow = items.filter(i => shouldShow(show, i));
+  $: itemsToShow = sortOnName(items.filter(i => shouldShow(show, i)));
 
   function addItem() {
     const {items} = category;
-    items.push({id: getGuid(), name: itemName, packed: false});
-    items.sort((item1, item2) => item1.name.localeCompare(item2.name));
+    const id = getGuid();
+    items[id] = {id, name: itemName, packed: false};
+    //items.sort((item1, item2) => item1.name.localeCompare(item2.name));
     category.items = items;
     itemName = '';
+    dispatch('persist');
   }
 
   function deleteItem(item) {
     //TODO: Warn if it contains items.
     delete category.items[item.id];
+
+    // Trigger update.
+    category = category;
+
+    dispatch('persist');
   }
 
   function handleKey(event) {
@@ -81,14 +90,15 @@
     margin: 0;
   }
 
-  .hovering {
-    outline: solid orange 3px;
+  .hover {
+    border-color: orange;
   }
 
   section {
     --padding: 10px;
 
     background-color: white;
+    border: solid transparent 3px;
     border-radius: var(--padding);
     color: black;
     display: inline-block;
@@ -114,9 +124,9 @@
 <section
   in:scale={options}
   out:spin={options}
-  class:hovering={dnd.hoveringOver === category.id}
-  on:dragenter={() => (dnd.hoveringOver = category.id)}
-  on:dragleave={() => (dnd.hoveringOver = null)}
+  class:hover={hover === category.id}
+  on:dragenter={() => (hover = category.id)}
+  on:dragleave={() => (hover = null)}
   on:drop|preventDefault={event => dnd.drop(event, category.id)}
   ondragover="return false">
   <ProgressBar percent={(100 * (total - remaining)) / total} />
@@ -133,6 +143,8 @@
     <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
   </h3>
 
+  <div>{category.id.substring(0, 8)}</div>
+
   <form on:submit|preventDefault={addItem}>
     <label>
       New Item
@@ -140,6 +152,10 @@
     </label>
     <button disabled={!itemName}>Add Item</button>
   </form>
+
+  <!--div>dnd.hover = {dnd.hover}</div>
+  <div>category.id = {category.id}</div>
+  <div>hovering = {dnd.hover === category.id}</div-->
 
   <ul>
     <!-- The div inside #each is required because animate
