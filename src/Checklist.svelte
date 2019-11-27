@@ -1,5 +1,5 @@
 <script>
-  import {createEventDispatcher, onMount} from 'svelte';
+  import {createEventDispatcher} from 'svelte';
   import {flip} from 'svelte/animate';
 
   import Category from './Category.svelte';
@@ -41,14 +41,15 @@
 
   let hover = null; // a category id
 
-  onMount(restore);
+  // Must do this before first call to persist.
+  restore();
 
   // Any time categories changes, persist it to localStorage.
   $: if (categories) persist();
 
   function addCategory() {
     const id = getGuid();
-    categories[id] = {id, name: categoryName, items: []};
+    categories[id] = {id, name: categoryName, items: {}};
     //categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
     categories = categories;
     categoryName = '';
@@ -64,7 +65,7 @@
   }
 
   function createCategory(name) {
-    return {id: getGuid(), name, items: []};
+    return {id: getGuid(), name, items: {}};
   }
 
   function createDummyData() {
