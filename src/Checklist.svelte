@@ -104,7 +104,12 @@
   }
 
   function deleteCategory(category) {
-    //TODO: Warn if contains items.
+    if (Object.values(category.items).length) {
+      message = 'This category is not empty.';
+      myDialog.showModal();
+      return;
+    }
+
     delete categories[category.id];
     categories = categories;
   }

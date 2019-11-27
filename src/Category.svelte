@@ -51,7 +51,6 @@
   }
 
   function deleteItem(item) {
-    //TODO: Warn if it contains items.
     delete category.items[item.id];
 
     // Trigger update.
