@@ -2,6 +2,8 @@
   import {createEventDispatcher} from 'svelte';
   //import {flip} from 'svelte/animate';
 
+  export let categoryId;
+  export let dnd;
   export let item;
 
   let editing = false;
@@ -33,7 +35,9 @@
   }
 </style>
 
-<li>
+<li
+  draggable={true}
+  on:dragstart={event => dnd.drag(event, categoryId, item.id)}>
   <label class="packed-{item.packed}">
     <input type="checkbox" bind:checked={item.packed} />
     {#if editing}

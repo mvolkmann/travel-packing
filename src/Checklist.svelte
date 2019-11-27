@@ -12,21 +12,47 @@
   let categoryName;
   let show = 'all';
 
+  const dragAndDrop = {
+    hoveringOver: null,
+    drag(event, categoryId, itemId) {
+      const data = {categoryId, itemId};
+      event.dataTransfer.setData('text/plain', JSON.stringify(data));
+    },
+    drop(event, categoryId) {
+      const json = event.dataTransfer.getData('text/plain');
+      const data = JSON.parse(json);
+
+      // Remove the item from one category.
+      const category = categories[data.categoryId];
+      const item = category.items[data.itemId];
+      delete category.items[data.itemId];
+
+      // Add the item to another category.
+      categories[categoryId].items[data.itemId] = item;
+
+      // Trigger Svelte update.
+      categories = categories;
+
+      this.hoveringOver = null;
+    }
+  };
+
   onMount(restore);
 
   // Any time categories changes, persist it to localStorage.
   $: persist(categories);
 
   function addCategory() {
-    categories.push({id: getGuid(), name: categoryName, items: []});
-    categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
+    const id = getGuid();
+    categories[id] = {id, name: categoryName, items: []};
+    //categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
     categories = categories;
     categoryName = '';
   }
 
   function clearAllChecks() {
-    for (const category of categories) {
-      for (const item of category.items) {
+    for (const category of Object.values(categories)) {
+      for (const item of Object.values(category.items)) {
         item.packed = false;
       }
     }
@@ -39,14 +65,25 @@
 
   function createDummyData() {
     let backpack = createCategory('Backpack');
-    backpack.items.push(createItem('pens', true));
-    backpack.items.push(createItem('wallet'));
+    const pens = createItem('pens', true);
+    const wallet = createItem('wallet');
+    backpack.items = {
+      [pens.id]: pens,
+      [wallet.id]: wallet
+    };
 
     let clothes = createCategory('Clothes');
-    clothes.items.push(createItem('socks', true));
-    clothes.items.push(createItem('shoes'));
+    const socks = createItem('socks', true);
+    const shoes = createItem('shoes');
+    clothes.items = {
+      [socks.id]: socks,
+      [shoes.id]: shoes
+    };
 
-    categories = [backpack, clothes];
+    categories = {
+      [backpack.id]: backpack,
+      [clothes.id]: clothes
+    };
   }
 
   function createItem(name, packed = false) {
@@ -55,7 +92,8 @@
 
   function deleteCategory(category) {
     //TODO: Warn if contains items.
-    categories = categories.filter(cat => cat.id !== category.id);
+    delete categories[category.id];
+    categories = categories;
   }
 
   function persist(categories) {
@@ -66,8 +104,8 @@
 
   function restore() {
     const text = localStorage.getItem('travel-packing');
-    if (text && text !== '[]') {
-      categories = text ? JSON.parse(text) : [];
+    if (text && text !== '{}') {
+      categories = JSON.parse(text);
     } else {
       createDummyData();
     }
@@ -97,6 +135,7 @@
     font-size: 24px;
     margin-right: 1em;
     margin-top: 1em;
+    max-width: 90%;
   }
 
   .radios {
@@ -153,13 +192,13 @@
   {#if categories}
     <!-- The bind here is necessary so changes to category in
          the Category component trigger a call to persist here. -->
-    {#each categories as category (category.id)}
+    {#each Object.values(categories) as category (category.id)}
       <div class="animate" animate:flip={options}>
         <Category
           bind:category
+          dnd={dragAndDrop}
           {show}
-          on:delete={() => deleteCategory(category)}
-        />
+          on:delete={() => deleteCategory(category)} />
       </div>
     {/each}
   {/if}

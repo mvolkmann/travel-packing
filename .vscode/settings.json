@@ -1,8 +1,12 @@
 {
   "cSpell.words": [
     "dedupe",
+    "dragenter",
+    "dragleave",
+    "dragstart",
     "importee",
     "lightgray",
+    "ondragover",
     "signup",
     "sirv",
     "uuidv"

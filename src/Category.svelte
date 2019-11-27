@@ -2,12 +2,13 @@
   import {createEventDispatcher} from 'svelte';
   import {flip} from 'svelte/animate';
   import {scale} from 'svelte/transition';
-	import {linear} from 'svelte/easing';
+  import {linear} from 'svelte/easing';
   import Item from './Item.svelte';
   import ProgressBar from './ProgressBar.svelte';
   import {getGuid} from './util';
 
   export let category;
+  export let dnd;
   export let show;
 
   const dispatch = createEventDispatcher();
@@ -17,10 +18,11 @@
   let editing = false;
   let itemName = '';
 
-  $: remaining = category.items.filter(item => !item.packed).length;
-  $: total = category.items.length;
+  $: items = Object.values(category.items);
+  $: remaining = items.filter(item => !item.packed).length;
+  $: total = items.length;
   $: status = `${remaining} of ${total} remaining`;
-  $: itemsToShow = category.items.filter(i => shouldShow(show, i));
+  $: itemsToShow = items.filter(i => shouldShow(show, i));
 
   function addItem() {
     const {items} = category;
@@ -32,7 +34,7 @@
 
   function deleteItem(item) {
     //TODO: Warn if it contains items.
-    category.items = category.items.filter(it => it.id !== item.id);
+    delete category.items[item.id];
   }
 
   function handleKey(event) {
@@ -47,17 +49,18 @@
     );
   }
 
-	function spin(node, options) {
+  function spin(node, options) {
     const {easing, times = 1} = options;
-		return {
-			...options,
-			css(t) {
-				const eased = easing(t);
-				const degrees = 360 * times; // through which to spin
-				return `transform-origin: 50% 50%; transform: scale(${eased}) rotate(${eased * degrees}deg);`;
-			}
-		};
-	}
+    return {
+      ...options,
+      css(t) {
+        const eased = easing(t);
+        const degrees = 360 * times; // through which to spin
+        return `transform-origin: 50% 50%; transform: scale(${eased}) rotate(${eased *
+          degrees}deg);`;
+      }
+    };
+  }
 </script>
 
 <style>
@@ -66,12 +69,20 @@
     border: solid lightgray 1px;
   }
 
+  button.icon {
+    border: none;
+  }
+
   h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     margin: 0;
+  }
+
+  .hovering {
+    outline: solid orange 3px;
   }
 
   section {
@@ -100,7 +111,14 @@
   }
 </style>
 
-<section in:scale={options} out:spin={options}>
+<section
+  in:scale={options}
+  out:spin={options}
+  class:hovering={dnd.hoveringOver === category.id}
+  on:dragenter={() => (dnd.hoveringOver = category.id)}
+  on:dragleave={() => (dnd.hoveringOver = null)}
+  on:drop|preventDefault={event => dnd.drop(event, category.id)}
+  ondragover="return false">
   <ProgressBar percent={(100 * (total - remaining)) / total} />
   <h3>
     {#if editing}
@@ -131,7 +149,11 @@
       <div animate:flip>
         <!-- This bind causes the category object to update
              when the item packed value is toggled. -->
-        <Item bind:item on:delete={() => deleteItem(item)} />
+        <Item
+          bind:item
+          {dnd}
+          on:delete={() => deleteItem(item)}
+          categoryId={category.id} />
       </div>
     {:else}
       <div>This category does not contain any items yet.</div>
