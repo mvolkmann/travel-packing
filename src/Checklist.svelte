@@ -93,6 +93,7 @@
 
   function deleteCategory(category) {
     //TODO: Warn if contains items.
+    console.log('Checklist.svelte deleteCategory: category =', category);
     delete categories[category.id];
     categories = categories;
   }
@@ -116,6 +117,12 @@
     display: inline-block;
   }
 
+  .categories {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
   .clear {
     margin-left: 30px;
   }
@@ -128,13 +135,6 @@
     position: absolute;
     right: 20px;
     top: 20px;
-  }
-
-  main {
-    font-size: 24px;
-    margin-right: 1em;
-    margin-top: 1em;
-    max-width: 90%;
   }
 
   .radios {
@@ -152,52 +152,67 @@
   .radios > label > input {
     margin: 0 10px 3px 0;
   }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: 24px;
+    margin-top: 1em;
+    /* max-width: 90%; */
+  }
 </style>
 
-<main>
-  <form on:submit|preventDefault={addCategory}>
-    <label>
-      New Category
-      <input bind:value={categoryName} />
-    </label>
-    <button disabled={!categoryName}>Add Category</button>
-    <button class="logout-btn" on:click={() => dispatch('logout')}>
-      Log Out
-    </button>
-  </form>
-  <p>
-    Suggested categories include Backpack, Clothes, Last Minute, Medicines,
-    Running Gear, and Toiletries.
-  </p>
+<section>
+  <header>
+    <form on:submit|preventDefault={addCategory}>
+      <label>
+        New Category
+        <input bind:value={categoryName} />
+      </label>
+      <button disabled={!categoryName}>Add Category</button>
+      <button class="logout-btn" on:click={() => dispatch('logout')}>
+        Log Out
+      </button>
+    </form>
+    <p>
+      Suggested categories include Backpack, Clothes,
+      <br />
+      Last Minute, Medicines, Running Gear, and Toiletries.
+    </p>
 
-  <div class="radios">
-    <label>Show</label>
-    <label>
-      <input name="show" type="radio" value="all" bind:group={show} />
-      All
-    </label>
-    <label>
-      <input name="show" type="radio" value="packed" bind:group={show} />
-      Packed
-    </label>
-    <label>
-      <input name="show" type="radio" value="unpacked" bind:group={show} />
-      Unpacked
-    </label>
+    <div class="radios">
+      <label>Show</label>
+      <label>
+        <input name="show" type="radio" value="all" bind:group={show} />
+        All
+      </label>
+      <label>
+        <input name="show" type="radio" value="packed" bind:group={show} />
+        Packed
+      </label>
+      <label>
+        <input name="show" type="radio" value="unpacked" bind:group={show} />
+        Unpacked
+      </label>
 
-    <button class="clear" on:click={clearAllChecks}>Clear All Checks</button>
-  </div>
-
-  <!-- The bind here is necessary so changes to category in
-        the Category component trigger a call to persist here. -->
-  {#each categoryArray as category (category.id)}
-    <div class="animate" animate:flip={options}>
-      <Category
-        bind:category
-        dnd={dragAndDrop}
-        {show}
-        on:delete={() => deleteCategory(category)}
-        on:persist={persist} />
+      <button class="clear" on:click={clearAllChecks}>Clear All Checks</button>
     </div>
-  {/each}
-</main>
+  </header>
+
+  <div class="categories">
+    <!-- The bind here is necessary so changes to category in
+        the Category component trigger a call to persist here. -->
+    {#each categoryArray as category (category.id)}
+      <div class="animate" animate:flip={options}>
+        <Category
+          bind:category
+          dnd={dragAndDrop}
+          {show}
+          on:delete={() => deleteCategory(category)}
+          on:persist={persist} />
+      </div>
+    {/each}
+  </div>
+</section>

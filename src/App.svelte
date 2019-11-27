@@ -28,6 +28,13 @@
     align-items: center;
     height: 100vh;
   }
+
+  @media (max-width: 635px) {
+    .hero {
+      color: blue;
+      font-size: 48px;
+    }
+  }
 </style>
 
 <main>

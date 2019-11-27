@@ -109,7 +109,7 @@
   }
 
   section * {
-    pointer-events: none;
+    /* pointer-events: none; */
   }
 
   .status {
@@ -129,7 +129,7 @@
   in:scale={options}
   out:spin={options}
   class:hover={hovering}
-  on:dragenter={() => hovering = true}
+  on:dragenter={() => (hovering = true)}
   on:dragleave={event => {
     // Only turn off hovering if leaving
     // the root element of this component.
@@ -152,7 +152,14 @@
       <span on:click={() => (editing = true)}>{category.name}</span>
     {/if}
     <span class="status">{status}</span>
-    <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
+    <button
+      class="icon"
+      on:click={() => {
+        console.log('Category.svelte: got click');
+        dispatch('delete');
+      }}>
+      &#x1F5D1;
+    </button>
   </h3>
 
   <form on:submit|preventDefault={addItem}>
@@ -163,18 +170,14 @@
     <button disabled={!itemName}>Add Item</button>
   </form>
 
-  <!--div>dnd.hover = {dnd.hover}</div>
-  <div>category.id = {category.id}</div>
-  <div>hovering = {dnd.hover === category.id}</div-->
-
   <ul>
     <!-- The div inside #each is required because animate
-         must appear on a direct child of keyed each block.
-         It cannot be applied to a component. -->
+      must appear on a direct child of keyed each block.
+      It cannot be applied to a component. -->
     {#each itemsToShow as item (item.id)}
       <div animate:flip>
         <!-- This bind causes the category object to update
-             when the item packed value is toggled. -->
+          when the item packed value is toggled. -->
         <Item
           bind:item
           {dnd}
