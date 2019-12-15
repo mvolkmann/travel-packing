@@ -9,6 +9,23 @@
   const signup = () => dispatch('signup');
 </script>
 
+<section>
+  <form on:submit|preventDefault={login}>
+    <label>
+      Username
+      <input bind:value={username} />
+    </label>
+    <label>
+      Password
+      <input type="password" bind:value={password} />
+    </label>
+    <div class="buttons">
+      <button disabled={!username || !password}>Login</button>
+      <button type="button" on:click={signup}>Sign Up</button>
+    </div>
+  </form>
+</section>
+
 <style>
   .buttons {
     display: flex;
@@ -33,22 +50,3 @@
     margin-top: 0.5rem;
   }
 </style>
-
-<section>
-  <form on:submit|preventDefault={login}>
-    <label>
-      Username
-      <input bind:value={username} />
-    </label>
-    <label>
-      Password
-      <input type="password" bind:value={password} />
-    </label>
-    <div class="buttons">
-      <button type="submit" disabled={!username || !password}>
-        Login
-      </button>
-      <button type="button" on:click={signup}>Sign Up</button>
-    </div>
-  </form>
-</section>

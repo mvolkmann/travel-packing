@@ -128,62 +128,6 @@
   }
 </script>
 
-<style>
-  .animate {
-    display: inline-block;
-  }
-
-  .categories {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .clear {
-    margin-left: 30px;
-  }
-
-  input[type='radio'] {
-    --size: 24px;
-    height: var(--size);
-    width: var(--size);
-    margin-left: 10px;
-  }
-
-  .logout-btn {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-  }
-
-  .radios {
-    display: flex;
-    align-items: center;
-  }
-
-  .radios > label:not(:first-of-type) {
-    display: inline-flex;
-    align-items: center;
-
-    margin-left: 1em;
-  }
-
-  .radios > label > input {
-    margin-bottom: -3px;
-    margin-right: 5px;
-  }
-
-  section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    font-size: 24px;
-    margin-top: 1em;
-    /* max-width: 90%; */
-  }
-</style>
-
 <section>
   <header>
     <form on:submit|preventDefault={addCategory}>
@@ -243,3 +187,59 @@
     <div>{message}</div>
   </Dialog>
 </section>
+
+<style>
+  .animate {
+    display: inline-block;
+  }
+
+  .categories {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .clear {
+    margin-left: 30px;
+  }
+
+  input[type='radio'] {
+    --size: 24px;
+    height: var(--size);
+    width: var(--size);
+    margin-left: 10px;
+  }
+
+  .logout-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+
+  .radios {
+    display: flex;
+    align-items: center;
+  }
+
+  .radios > label:not(:first-of-type) {
+    display: inline-flex;
+    align-items: center;
+
+    margin-left: 1em;
+  }
+
+  .radios > label > input {
+    margin-bottom: -3px;
+    margin-right: 5px;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: 24px;
+    margin-top: 1em;
+    /* max-width: 90%; */
+  }
+</style>

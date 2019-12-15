@@ -43,6 +43,20 @@
   }
 </script>
 
+<!-- See README.md for documentation on using this. -->
+<dialog bind:this={dialog} class={classNames}>
+  <header>
+    {#if icon}{icon}{/if}
+    <div class="title">{title}</div>
+    {#if canClose}
+      <button class="close-btn" on:click={close}>&#x2716;</button>
+    {/if}
+  </header>
+  <main>
+    <slot />
+  </main>
+</dialog>
+
 <style>
   .body {
     padding: 10px;
@@ -98,17 +112,3 @@
     background-color: rgba(0, 0, 0, 0.6);
   }
 </style>
-
-<!-- See README.md for documentation on using this. -->
-<dialog bind:this={dialog} class={classNames}>
-  <header>
-    {#if icon}{icon}{/if}
-    <div class="title">{title}</div>
-    {#if canClose}
-      <button class="close-btn" on:click={close}>&#x2716;</button>
-    {/if}
-  </header>
-  <main>
-    <slot />
-  </main>
-</dialog>

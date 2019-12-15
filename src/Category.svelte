@@ -85,59 +85,6 @@
   }
 </script>
 
-<style>
-  button,
-  input {
-    border: solid lightgray 1px;
-  }
-
-  button.icon {
-    border: none;
-  }
-
-  h3 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin: 0;
-  }
-
-  .hover {
-    border-color: orange;
-  }
-
-  section {
-    --padding: 10px;
-
-    background-color: white;
-    border: solid transparent 3px;
-    border-radius: var(--padding);
-    color: black;
-    display: inline-block;
-    margin: var(--padding);
-    padding: calc(var(--padding) * 2);
-    padding-top: var(--padding);
-    vertical-align: top;
-  }
-
-  section * {
-    /* pointer-events: none; */
-  }
-
-  .status {
-    font-size: 18px;
-    font-weight: normal;
-    margin: 0 15px;
-  }
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding-left: 0;
-  }
-</style>
-
 <section
   in:scale={options}
   out:spin={options}
@@ -197,3 +144,56 @@
     <div>{message}</div>
   </Dialog>
 </section>
+
+<style>
+  button,
+  input {
+    border: solid lightgray 1px;
+  }
+
+  button.icon {
+    border: none;
+  }
+
+  h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 0;
+  }
+
+  .hover {
+    border-color: orange;
+  }
+
+  section {
+    --padding: 10px;
+
+    background-color: white;
+    border: solid transparent 3px;
+    border-radius: var(--padding);
+    color: black;
+    display: inline-block;
+    margin: var(--padding);
+    padding: calc(var(--padding) * 2);
+    padding-top: var(--padding);
+    vertical-align: top;
+  }
+
+  section * {
+    /* pointer-events: none; */
+  }
+
+  .status {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0 15px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+</style>

@@ -16,6 +16,25 @@
   }
 </script>
 
+<li
+  draggable={true}
+  on:dragstart={event => dnd.drag(event, categoryId, item.id)}>
+  <input type="checkbox" bind:checked={item.packed} />
+  {#if editing}
+    <input
+      autofocus
+      bind:value={item.name}
+      on:blur={() => (editing = false)}
+      on:keydown={handleKey}
+      type="text" />
+  {:else}
+    <span class="packed-{item.packed}" on:click={() => (editing = true)}>
+      {item.name}
+    </span>
+  {/if}
+  <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
+</li>
+
 <style>
   button {
     background-color: transparent;
@@ -49,22 +68,3 @@
     margin: 0 10px;
   }
 </style>
-
-<li
-  draggable={true}
-  on:dragstart={event => dnd.drag(event, categoryId, item.id)}>
-  <input type="checkbox" bind:checked={item.packed} />
-  {#if editing}
-    <input
-      autofocus
-      bind:value={item.name}
-      on:blur={() => (editing = false)}
-      on:keydown={handleKey}
-      type="text" />
-  {:else}
-    <span class="packed-{item.packed}" on:click={() => (editing = true)}>
-      {item.name}
-    </span>
-  {/if}
-  <button class="icon" on:click={() => dispatch('delete')}>&#x1F5D1;</button>
-</li>

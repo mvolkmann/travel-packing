@@ -2,6 +2,10 @@
   export let percent;
 </script>
 
+<div class="bar">
+  <div class="progress" style={`width: ${percent}%`} />
+</div>
+
 <style>
   .bar {
     background-color: white;
@@ -15,7 +19,3 @@
     height: 100%;
   }
 </style>
-
-<div class="bar">
-  <div class="progress" style={`width: ${percent}%`} />
-</div>
