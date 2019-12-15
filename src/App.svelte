@@ -6,6 +6,15 @@
   //let page = Checklist;
 </script>
 
+<main>
+  <h1 class="hero">Travel Packing Checklist</h1>
+  <svelte:component
+    this={page}
+    on:login={() => (page = Checklist)}
+    on:logout={() => (page = Login)}
+    on:signup={() => alert('Signup is not implemented yet.')} />
+</main>
+
 <style>
   .hero {
     --height: 120px;
@@ -36,12 +45,3 @@
     }
   }
 </style>
-
-<main>
-  <h1 class="hero">Travel Packing Checklist</h1>
-  <svelte:component
-    this={page}
-    on:login={() => (page = Checklist)}
-    on:logout={() => (page = Login)}
-    on:signup={() => alert('Signup is not implemented yet.')} />
-</main>

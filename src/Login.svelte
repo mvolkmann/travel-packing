@@ -30,7 +30,7 @@
   label {
     display: block;
     font-size: 24px;
-    margin-top: 0.5em;
+    margin-top: 0.5rem;
   }
 </style>
 
@@ -45,7 +45,7 @@
       <input type="password" bind:value={password} />
     </label>
     <div class="buttons">
-      <button type="submit" disabled={!username || !password} on:click={login}>
+      <button type="submit" disabled={!username || !password}>
         Login
       </button>
       <button type="button" on:click={signup}>Sign Up</button>
