@@ -140,7 +140,7 @@
     {/each}
   </ul>
 
-  <Dialog title="Categories" bind:dialog={myDialog}>
+  <Dialog title="Category" bind:dialog={myDialog}>
     <div>{message}</div>
   </Dialog>
 </section>

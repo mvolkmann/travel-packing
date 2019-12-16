@@ -50,7 +50,7 @@
       cat => cat.name === categoryName
     );
     if (duplicate) {
-        message = `The category "${categoryName}" already exists.`;
+      message = `The category "${categoryName}" already exists.`;
       myDialog.showModal();
       return;
     }
@@ -182,7 +182,7 @@
     {/each}
   </div>
 
-  <Dialog title="Categories" bind:dialog={myDialog}>
+  <Dialog title="Checklist" bind:dialog={myDialog}>
     <div>{message}</div>
   </Dialog>
 </section>
