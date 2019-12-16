@@ -1,17 +1,4 @@
 <script>
-  /* Example usage:
-  <script>
-    let myDialog = null;
-  </scriptx> // the "x" gets around a Svelte comment parsing bug
-
-  <div>
-    <button on:click={() => myDialog.showModal()}>Open Dialog</button>
-  </div>
-
-  <Dialog title="Test Dialog" bind:dialog={myDialog}>
-    <div>This is my dialog content.</div>
-  </Dialog>
-  */
   import dialogPolyfill from 'dialog-polyfill';
   import {createEventDispatcher, onMount} from 'svelte';
 
@@ -38,17 +25,18 @@
   onMount(() => dialogPolyfill.registerDialog(dialog));
 
   function close() {
+    // Parent components can optionally listen for this event.
     dispatch('close');
     dialog.close();
   }
 </script>
 
-<!-- See README.md for documentation on using this. -->
 <dialog bind:this={dialog} class={classNames}>
   <header>
     {#if icon}{icon}{/if}
     <div class="title">{title}</div>
     {#if canClose}
+      <!-- Displays a unicode "heavy multiplication X". -->
       <button class="close-btn" on:click={close}>&#x2716;</button>
     {/if}
   </header>
