@@ -52,7 +52,7 @@
   }
 
   li {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     /* This is needed to counteract the "section *" setting
        of "pointer-events: none" in Category.svelte. */
