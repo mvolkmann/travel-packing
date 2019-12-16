@@ -35,8 +35,7 @@
       // Add the item to another category.
       categories[categoryId].items[data.itemId] = item;
 
-      // Trigger Svelte update.
-      categories = categories;
+      categories = categories; // trigger update
     }
   };
 
@@ -51,7 +50,7 @@
       cat => cat.name === categoryName
     );
     if (duplicate) {
-      message = `The category "${categoryName}" already exists.`;
+        message = `The category "${categoryName}" already exists.`;
       myDialog.showModal();
       return;
     }
@@ -59,8 +58,8 @@
     const id = getGuid();
     categories[id] = {id, name: categoryName, items: {}};
     //categories.sort((c1, c2) => c1.name.localeCompare(c2.name));
-    categories = categories;
-    categoryName = '';
+    categories = categories; // trigger update
+    categoryName = ''; // clear input
   }
 
   function clearAllChecks() {
