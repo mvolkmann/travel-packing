@@ -94,7 +94,7 @@
     const {localName} = event.target;
     if (localName === 'section') hovering = false;
   }}
-  on:drop|preventDefault={event => {
+  on:drop={event => {
     dnd.drop(event, category.id);
     hovering = false;
   }}

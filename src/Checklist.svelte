@@ -135,9 +135,7 @@
         <input bind:value={categoryName} />
       </label>
       <button disabled={!categoryName}>Add Category</button>
-      <button
-        class="logout-btn"
-        on:click={() => dispatch('logout')}>
+      <button class="logout-btn" on:click={() => dispatch('logout')}>
         Log Out
       </button>
     </form>
